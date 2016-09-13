@@ -165,7 +165,7 @@ if(isset($_POST['search']))
 			$akey_query = mysql_query("select * from akey where medium LIKE '$medium' && class LIKE '$class' && section LIKE '$section'") or die(mysql_error());
 			while ($akey = mysql_fetch_array($akey_query)) {
 				//query for current id
-				$current_id_query = mysql_query("select * from current_id where akey = '$akey[0]' and aca_year = '$current_year'");
+				$current_id_query = mysql_query("select * from current_id where akey = '$akey[0]' and aca_year = '$current_year' ORDER BY id");
 
 				$color = "#000";
 				while ($current_id_query_result = mysql_fetch_array($current_id_query)) {

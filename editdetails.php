@@ -35,17 +35,15 @@ if(isset($_POST['submit']))
 /*Code to upload pic of student*/
 	if(isset($_FILES['spic']))
 							{
-								echo "<h1>Hai2</h1>";
 							   // $check = getimagesize($_FILES["pic"]["tmp_name"]);
-								if($_FILES["pic"]["size"] != 0) {
+								if($_FILES["spic"]["size"] != 0) {
 							  
 							   $imageName = mysql_real_escape_string($_FILES["spic"]["name"]);
 							   $imageData = mysql_real_escape_string(file_get_contents($_FILES["spic"]["tmp_name"]));
 							   $imageType = mysql_real_escape_string($_FILES["spic"]["type"]);
-										   if($_FILES["spic"]["type"] == "image/jpeg" || $_FILES["spic"]["type"] == "image/gif" || $_FILES["spic"]["type"] == "image/png" && $_FILES["spic"]["size"] < 2120000)
+										   if($_FILES["spic"]["type"] == "image/jpeg" || $_FILES["spic"]["type"] == "image/gif" || $_FILES["spic"]["type"] == "image/png")
 										   { 
-												$spic = $imageData;
-												echo "<h1>Hai</h1>";		
+												$spic = $imageData;		
 											   $vstudent_query = mysql_query("UPDATE vstudent set pic = '$spic' where current_id = '$current_id'")  or die(mysql_error());
 										   }
 											else
@@ -66,7 +64,7 @@ else $spic = "";
 							   $imageName = mysql_real_escape_string($_FILES["fpic"]["name"]);
 							   $imageData = mysql_real_escape_string(file_get_contents($_FILES["fpic"]["tmp_name"]));
 							   $imageType = mysql_real_escape_string($_FILES["fpic"]["type"]);
-							   if($_FILES["fpic"]["type"] == "image/jpeg" || $_FILES["fpic"]["type"] == "image/gif" || $_FILES["fpic"]["type"] == "image/png" && $_FILES["fpic"]["size"] < 2120000)
+							   if($_FILES["fpic"]["type"] == "image/jpeg" || $_FILES["fpic"]["type"] == "image/gif" || $_FILES["fpic"]["type"] == "image/png")
 							   { 
 									$fpic = $imageData;		
 									$parent_query = mysql_query("UPDATE parent set fpic = '$fpic' where id = '$id'") or die(mysql_error());
@@ -88,7 +86,7 @@ else $fpic = "";
 							   $imageName = mysql_real_escape_string($_FILES["mpic"]["name"]);
 							   $imageData = mysql_real_escape_string(file_get_contents($_FILES["mpic"]["tmp_name"]));
 							   $imageType = mysql_real_escape_string($_FILES["mpic"]["type"]);
-							   if($_FILES["mpic"]["type"] == "image/jpeg" || $_FILES["mpic"]["type"] == "image/gif" || $_FILES["mpic"]["type"] == "image/png" && $_FILES["mpic"]["size"] < 2120000)
+							   if($_FILES["mpic"]["type"] == "image/jpeg" || $_FILES["mpic"]["type"] == "image/gif" || $_FILES["mpic"]["type"] == "image/png")
 							   { 
 									$mpic = $imageData;		
 									$parent_query = mysql_query("UPDATE parent set mpic = '$mpic' where id = '$id'") or die(mysql_error());
@@ -127,7 +125,8 @@ $mpic = "";
 	//$mname = $_POST['mname'];
 	//$mocu = $_POST['mocu'];
 	//$medu = $_POST['medu'];
-	if($aadhar!= "" && $ration != "" && $address != "" && $contact != "")
+	//if($aadhar!= "" && $ration != "" && $address != "" && $contact != "")
+	if(true)
 	{
 			$student_query = mysql_query("UPDATE student set aadhar = '$aadhar', ration = '$ration' where id = '$id'");
 		
@@ -232,7 +231,7 @@ $current_id = $_GET['id'];
 <?php if(isset($message)) echo '<h4 align="center" style="color:#F00; background-color:#FFF">'.$message.'</h4>';?>
 <h2>Personal Details</h2>
 <div class="row">
-<form role="form" action="editdetails.php?id=<?php echo $current_id;?>" name="f" method="post">
+<form role="form" action="editdetails.php?id=<?php echo $current_id;?>" name="f" method="post" enctype="multipart/form-data">
     <div class="col-md-4">
     	<div class="form-group">
 			<input type="text" name="firstname" class="form-control" readonly="readonly" placeholder="First Name" maxlength="100" value="<?php echo $firstname; ?>" />
