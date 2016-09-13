@@ -278,4 +278,7 @@ function year()
 		return $output;
 	}
 <?php */
+function getClearedNull($v){
+	return $v == ""? "%%" : $v;
+}
 ?>

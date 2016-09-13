@@ -10,6 +10,7 @@
 <script src="js/bootstrap.min.js" type="text/javascript"></script>
 </head>
 <?php
+ini_set('display_errors', 1);
 if(isset($_POST['submit']))
 {
 /*Code to upload pic of student*/
@@ -149,7 +150,7 @@ $mpic = "";
 <form role="form" action="" name="f" method="post">
     <div class="col-md-4">
     	<div class="form-group">
-			<input type="text" name="firstname" class="form-control" placeholder="First Name" maxlength="100" value="" />
+			<input type="text" name="firstname" class="form-control must-field" placeholder="First Name" maxlength="100" value="" />
 		</div>
         <div class="form-group">
 			<input type="text" name="aadhar" class="form-control" placeholder="AADHAR Number" maxlength="12" value="" />
@@ -171,7 +172,7 @@ $mpic = "";
     </div>
     <div class="col-md-4">
     	<div class="form-group">
-			<input type="text" name="lastname" class="form-control" placeholder="Last Name" maxlength="100" value="" />
+			<input type="text" name="lastname" class="form-control must-field" placeholder="Last Name" maxlength="100" value="" />
 		</div>
     	<div class="form-group">
 			<input type="text" name="ration" class="form-control" placeholder="Ration Card Number" maxlength="16" value="" />
@@ -192,14 +193,14 @@ $mpic = "";
     </div>
     <div class="col-md-4">
     	<div class="form-group">
-            <select class="form-control" id="sex" name="sex">
+            <select class="form-control must-field" id="sex" name="sex">
             	<option>--Gender--</option>
                	<option value="M">Male</option>
                	<option value="F">Female</option>
             </select>
         </div>
         <div class="form-group">
-            <select class="form-control" id="sel1" name="coj">
+            <select class="form-control must-field" id="sel1" name="coj">
             	<option>--Class of Joining--</option>
                	<option value="-2">LKG</option>
                	<option value="-1">UKG</option>
@@ -217,7 +218,7 @@ $mpic = "";
             </select>
         </div>
         <div class="form-group">
-            <select class="form-control" id="meduim" name="moj">
+            <select class="form-control must-field" id="meduim" name="moj">
             	<option>--Meduim of Joining--</option>
                	<option value="E">English Medium</option>
                	<option value="T">Telugu Medium</option>
@@ -233,7 +234,7 @@ $mpic = "";
     </div>
     <div class="col-md-4">
     	<div class="form-group">
-        	<input type="text" list="ids" class="form-control" name="id" id="id" placeholder="Unique-Id" value="" />
+        	<input type="text" list="ids" maxlength="10" class="form-control must-field" name="id" id="id" placeholder="Unique-Id" value="" />
             <datalist id="ids">
             <option>NPSHS</option>
             <option>NPSES</option>
@@ -245,7 +246,7 @@ $mpic = "";
     </div>
     <div class="col-md-4">
     	<div class="form-group">
-        	<select name="section" class="form-control">
+        	<select name="section" class="form-control must-field">
             	<option value="A">--Section--</option>
     			<option value="A">A</option>
                 <option value="B">B</option>
@@ -261,12 +262,12 @@ $mpic = "";
 
     <div class="col-md-6">
     	<div class="form-group">
-        	<label for="text">Date of Birth:</label>
-			<input type="date" name="dob" class="form-control" placeholder="Date of Birth" value="" />
+        	<label for="text">Date of Birth</label>
+			<input type="date" name="dob" class="form-control must-field" placeholder="Date of Birth" value="" />
 		</div>
         <div class="form-group">
         	<label for="date">Date of Joining</label>
-			<input type="date" name="doj" class="form-control" placeholder="Date of Joining" value="" />
+			<input type="date" name="doj" class="form-control must-field" placeholder="Date of Joining" value="" />
 		</div>
     </div>
     <div class="col-md-6">

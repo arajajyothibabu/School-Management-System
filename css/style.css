@@ -22,3 +22,6 @@ div{margin:0 0 0 0;}
 li a{
 	text-decoration:none; color:#FFF;
 	}
+.must-field{
+	border-color: red !important;
+}

@@ -157,23 +157,21 @@ if(isset($_POST['search']))
 		}
 	else
 	{
-		$medium = $_POST['medium'];
-		$class = $_POST['class'];
-		$section = $_POST['section'];
-		if($medium != "" && $class != "" && $section != "")
-		{
+		$medium = getClearedNull($_POST['medium']);
+		$class = getClearedNull($_POST['class']);
+		$section = getClearedNull($_POST['section']);
+		if($medium != "" && $class != "" && $section != "") {
 			$i = 0;
-			$akey_query = mysql_query("select * from akey where medium = '$medium' && class = '$class' && section = '$section'") or die(mysql_error());
-			$akey = mysql_fetch_array($akey_query);
-			//query for current id
-			$current_id_query = mysql_query("select * from current_id where akey = '$akey[0]' and aca_year = '$current_year'");
-					
+			$akey_query = mysql_query("select * from akey where medium LIKE '$medium' && class LIKE '$class' && section LIKE '$section'") or die(mysql_error());
+			while ($akey = mysql_fetch_array($akey_query)) {
+				//query for current id
+				$current_id_query = mysql_query("select * from current_id where akey = '$akey[0]' and aca_year = '$current_year'");
+
 				$color = "#000";
-					while($current_id_query_result = mysql_fetch_array($current_id_query))
-					{
-							$i += 1;
-							if($i == 1)
-							echo '<div class="row" style="border-bottom:solid;">
+				while ($current_id_query_result = mysql_fetch_array($current_id_query)) {
+					$i += 1;
+					if ($i == 1)
+						echo '<div class="row" style="border-bottom:solid;">
 <div class="col-md-1" style="background-color:#F4F4F4">
 <h3 align="center">SNO.</h3>
 </div>
@@ -185,26 +183,27 @@ if(isset($_POST['search']))
 </div>
 </div>
 ';
-							//vstudent and students query
-							$vstudent_query = mysql_query("select * from vstudent where current_id = '$current_id_query_result[1]'");
-							$vstudent_query_result = mysql_fetch_array($vstudent_query);
-							$student_query = mysql_query("select * from student where id = '$current_id_query_result[id]'");
-							$search_result = mysql_fetch_array($student_query);
-							if($color == "#FFF") $color = "#000";
-							else $color = "#FFF";
-							echo '<a href="'.$page.'?id='.$current_id_query_result[0].'"><div style="border-bottom:solid;" class="row">
+					//vstudent and students query
+					$vstudent_query = mysql_query("select * from vstudent where current_id = '$current_id_query_result[1]'");
+					$vstudent_query_result = mysql_fetch_array($vstudent_query);
+					$student_query = mysql_query("select * from student where id = '$current_id_query_result[id]'");
+					$search_result = mysql_fetch_array($student_query);
+					if ($color == "#FFF") $color = "#000";
+					else $color = "#FFF";
+					echo '<a href="' . $page . '?id=' . $current_id_query_result[0] . '"><div style="border-bottom:solid;" class="row">
 <div class="col-md-1" style="background-color:#F4F4F4">
-<h5 align="center">'.$i.'</h5>
+<h5 align="center">' . $i . '</h5>
 </div>
 <div class="col-md-5" style="background-color:#EAEAEA" >
-<h5 align="center">'.$search_result[0].'</h5>
+<h5 align="center">' . $search_result[0] . '</h5>
 </div>
 <div class="col-md-6" style="background-color:#F8F8F8">
-<h5 align="center">'.$search_result[1].' '.$search_result[2].'</h5>
+<h5 align="center">' . $search_result[1] . ' ' . $search_result[2] . '</h5>
 </div>
 </div></a>';
-					}
+				}
 			}
+		}
 			else
 			$message = "Kindly select all fields, if search for an entire class..!";
 		}
