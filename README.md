@@ -1,8 +1,8 @@
-# NOT SUPPORTED
+# ⚠️ NOT SUPPORTED ⚠️
 
-#### A pet project done while exploring PHP in college days. This project doesn't implemented any patterns and code organsation (Not mature enough in those days :)). 
+#### This is pet project 👨‍💻  while exploring PHP in 🏫 days without any patterns ❌ and mostly unorganised code (Still learning  🧑‍🎓 ). 
 
-##### Fork to develop at your own risk.
+##### Fork to develop 👨‍💻 at your own risk ☠️.
 
 
 
