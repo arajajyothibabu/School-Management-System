@@ -13,13 +13,13 @@ $oldpass = $_POST['oldpass'];
 $newpass = $_POST['newpass'];
 $newpass1 = $_POST['newpass1'];
 if(notnull($oldpass) && notnull($newpass) && notnull($newpass1)){
-	$queryresult = mysql_query("select * from owner where password = '{$oldpass}' and username = '{$_SESSION['uname']}'");
+	$queryresult = mysqli_query($connection,"select * from owner where password = '{$oldpass}' and username = '{$_SESSION['uname']}'");
 		confirm_query($queryresult);
-				if (mysql_num_rows($queryresult) == 1) {
+				if (mysqli_num_rows($queryresult) == 1) {
 					// username/password authenticated
 					// and only 1 match
 					$pass = $newpass;
-					mysql_query("UPDATE owner set password = '{$pass}' where password = '{$oldpass}' and username = '{$_SESSION['uname']}'");
+					mysqli_query($connection,"UPDATE owner set password = '{$pass}' where password = '{$oldpass}' and username = '{$_SESSION['uname']}'");
 					
 					redirect_to("edit.php?msg=cpsuc");
 				}

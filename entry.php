@@ -19,9 +19,9 @@ if(isset($_POST['submit']))
 							   // $check = getimagesize($_FILES["pic"]["tmp_name"]);
 								if($_FILES["pic"]["size"] != 0) {
 							  
-							   $imageName = mysql_real_escape_string($_FILES["spic"]["name"]);
-							   $imageData = mysql_real_escape_string(file_get_contents($_FILES["spic"]["tmp_name"]));
-							   $imageType = mysql_real_escape_string($_FILES["spic"]["type"]);
+							   $imageName = mysqli_real_escape_string($connection,$_FILES["spic"]["name"]);
+							   $imageData = mysqli_real_escape_string($connection,file_get_contents($_FILES["spic"]["tmp_name"]));
+							   $imageType = mysqli_real_escape_string($connection,$_FILES["spic"]["type"]);
 										   if($_FILES["spic"]["type"] == "image/jpeg" || $_FILES["spic"]["type"] == "image/gif" || $_FILES["spic"]["type"] == "image/png" && $_FILES["spic"]["size"] < 2120000)
 										   { 
 												$spic = $imageData;		
@@ -41,9 +41,9 @@ else $spic = "";
 							   // $check = getimagesize($_FILES["pic"]["tmp_name"]);
 								if($_FILES["fpic"]["size"] != 0) {
 							  
-							   $imageName = mysql_real_escape_string($_FILES["fpic"]["name"]);
-							   $imageData = mysql_real_escape_string(file_get_contents($_FILES["fpic"]["tmp_name"]));
-							   $imageType = mysql_real_escape_string($_FILES["fpic"]["type"]);
+							   $imageName = mysqli_real_escape_string($connection,$_FILES["fpic"]["name"]);
+							   $imageData = mysqli_real_escape_string($connection,file_get_contents($_FILES["fpic"]["tmp_name"]));
+							   $imageType = mysqli_real_escape_string($connection,$_FILES["fpic"]["type"]);
 							   if($_FILES["fpic"]["type"] == "image/jpeg" || $_FILES["fpic"]["type"] == "image/gif" || $_FILES["fpic"]["type"] == "image/png" && $_FILES["fpic"]["size"] < 2120000)
 							   { 
 									$fpic = $imageData;		
@@ -62,9 +62,9 @@ else $fpic = "";
 							   // $check = getimagesize($_FILES["pic"]["tmp_name"]);
 								if($_FILES["mpic"]["size"] != 0) {
 							  
-							   $imageName = mysql_real_escape_string($_FILES["mpic"]["name"]);
-							   $imageData = mysql_real_escape_string(file_get_contents($_FILES["mpic"]["tmp_name"]));
-							   $imageType = mysql_real_escape_string($_FILES["mpic"]["type"]);
+							   $imageName = mysqli_real_escape_string($connection,$_FILES["mpic"]["name"]);
+							   $imageData = mysqli_real_escape_string($connection,file_get_contents($_FILES["mpic"]["tmp_name"]));
+							   $imageType = mysqli_real_escape_string($connection,$_FILES["mpic"]["type"]);
 							   if($_FILES["mpic"]["type"] == "image/jpeg" || $_FILES["mpic"]["type"] == "image/gif" || $_FILES["mpic"]["type"] == "image/png" && $_FILES["mpic"]["size"] < 2120000)
 							   { 
 									$mpic = $imageData;		
@@ -108,30 +108,30 @@ $mpic = "";
 	$medu = $_POST['medu'];
 	if($firstname != "" && $lastname != "" && $id != "" && $coj != "" && $moj != "" && $doj != "" && $section != "" && $sex != "")
 	{
-			$student_query = mysql_query("INSERT into student values('$id','$firstname','$lastname','$sex','$dob','$caste','$religion','$doj','$aadhar','$ration')") or die(mysql_error());
+			$student_query = mysqli_query($connection,"INSERT into student values('$id','$firstname','$lastname','$sex','$dob','$caste','$religion','$doj','$aadhar','$ration')") or die(mysqli_error($connection));
 		
-			$parent_query = mysql_query("INSERT into parent values('$id','$fname','$fpic','$focu','$fedu','$mname','$mpic','$mocu','$medu','$siblings')") or die(mysql_error());
+			$parent_query = mysqli_query($connection,"INSERT into parent values('$id','$fname','$fpic','$focu','$fedu','$mname','$mpic','$mocu','$medu','$siblings')") or die(mysqli_error($connection));
 			
-			$akey_query = mysql_query("select sno from akey where class = '$coj' and section = '$section' and medium = '$moj'") or die(mysql_error());
-			$akey = mysql_fetch_array($akey_query);
+			$akey_query = mysqli_query($connection,"select sno from akey where class = '$coj' and section = '$section' and medium = '$moj'") or die(mysqli_error($connection));
+			$akey = mysqli_fetch_array($akey_query);
 			
 			$aca_year = date('Y');
-			$current_id_query = mysql_query("INSERT into current_id values('','$id','$akey[0]','$aca_year')") or die(mysql_error());
+			$current_id_query = mysqli_query($connection,"INSERT into current_id values('','$id','$akey[0]','$aca_year')") or die(mysqli_error($connection));
 			
-			$current_ids_query = mysql_query("select sno from current_id where id = '$id'") or die(mysql_error());
-			$current_id = mysql_fetch_array($current_ids_query);
+			$current_ids_query = mysqli_query($connection,"select sno from current_id where id = '$id'") or die(mysqli_error($connection));
+			$current_id = mysqli_fetch_array($current_ids_query);
 			
-			$fee_query = mysql_query("select * from fee where akey = '$akey[0]'") or die(mysql_error());
-				$aca_fee = mysql_fetch_array($fee_query);
+			$fee_query = mysqli_query($connection,"select * from fee where akey = '$akey[0]'") or die(mysqli_error($connection));
+				$aca_fee = mysqli_fetch_array($fee_query);
 				$due = $aca_fee['fee'];
 			if($transport != "0")
 			{
-				$transport_fee_query = mysql_query("select * from transport where sno = '$transport'") or die(mysql_error());
-				$transport_fee = mysql_fetch_array($transport_fee_query);
+				$transport_fee_query = mysqli_query($connection,"select * from transport where sno = '$transport'") or die(mysqli_error($connection));
+				$transport_fee = mysqli_fetch_array($transport_fee_query);
 				$due += $transport_fee['fee'];
 				}
 			
-			$vstudent_query = mysql_query("INSERT into vstudent values('','$current_id[0]','$spic','$address','$contact','$due','$transport')") or die(mysql_error());
+			$vstudent_query = mysqli_query($connection,"INSERT into vstudent values('','$current_id[0]','$spic','$address','$contact','$due','$transport')") or die(mysqli_error($connection));
 		
 		
 		$message = "Registered successfully..!";
@@ -159,8 +159,8 @@ $mpic = "";
             <select class="form-control" id="sel1" name="caste">
             	<option>--Caste--</option>
                	<?php
-				$caste_query = mysql_query("select * from caste");
-				while($caste_query_result = mysql_fetch_array($caste_query))
+				$caste_query = mysqli_query($connection,"select * from caste");
+				while($caste_query_result = mysqli_fetch_array($caste_query))
 				{
 					echo '<option value="'.$caste_query_result[0].'">';
 				// if($caste == $religion_query_result[0]) echo 'selected="selected"';
@@ -181,8 +181,8 @@ $mpic = "";
             <select class="form-control" id="sel1" name="religion">
             	<option>--Religion--</option>
                <?php
-                $religion_query = mysql_query("select * from religion");
-				while($religion_query_result = mysql_fetch_array($religion_query))
+                $religion_query = mysqli_query($connection,"select * from religion");
+				while($religion_query_result = mysqli_fetch_array($religion_query))
 				{
 				echo '<option value="'.$religion_query_result[0].'">'.$religion_query_result['religion'].'</option>';
 				 //if($religion == $religion_query_result[0]) echo 'selected="selected">';
@@ -327,8 +327,8 @@ $mpic = "";
             <option value="0">-Bus Route(Transport)-</option>
             <option value="0">ByWalk</option>
             <?php 
-			$transport_query = mysql_query("select * from transport");
-			while($result = mysql_fetch_array($transport_query))
+			$transport_query = mysqli_query($connection,"select * from transport");
+			while($result = mysqli_fetch_array($transport_query))
 			echo '<option value="'.$result[0].'">'.$result[1].' / '.$result[2].'</option>';
 			?>
             </select>

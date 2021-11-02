@@ -18,19 +18,19 @@ if(isset($_POST['insert']))
 	$amount = $_POST['amount'];
 	if($medium != "" && $class != "" && $section != "" && $amount != "")
 	{
-		$akey_query = mysql_query("select * from akey where medium = '$medium' and class = '$class' and section = '$section'") or die(mysql_error());
-		$akey_query_result = mysql_fetch_array($akey_query);
+		$akey_query = mysqli_query($connection,"select * from akey where medium = '$medium' and class = '$class' and section = '$section'") or die(mysqli_error($connection));
+		$akey_query_result = mysqli_fetch_array($akey_query);
 		//***********
 		$current_year = date("Y");
-		$year_from_current_id = mysql_query("select max(aca_year) from current_id");
+		$year_from_current_id = mysqli_query($connection,"select max(aca_year) from current_id");
 		if($year_from_current_id)
 		{
-			$year_from_current_id_result = mysql_fetch_array($year_from_current_id);
+			$year_from_current_id_result = mysqli_fetch_array($year_from_current_id);
 			if($current_year > $year_from_current_id_result[0])
 				$current_year -= 1;
 			}
 		//*************
-		$fee_query = mysql_query("INSERT into fee values('','$akey_query_result[0]','$amount')") or die(mysql_error());
+		$fee_query = mysqli_query($connection,"INSERT into fee values('','$akey_query_result[0]','$amount')") or die(mysqli_error($connection));
 		if($fee_query)
 			$message = "Inserted successfully..!";
 		}

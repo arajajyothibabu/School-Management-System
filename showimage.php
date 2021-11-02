@@ -6,32 +6,32 @@ $sub = $_GET['sub'];
 	
 if($sub == 0)
 {
-	$query = mysql_query("select * from vstudent where current_id = '$main'") or die(mysql_error());	
+	$query = mysqli_query($connection,"select * from vstudent where current_id = '$main'") or die(mysqli_error($connection));	
 				
-				$qr = mysql_fetch_array($query);
+				$qr = mysqli_fetch_array($query);
 					$imageData = $qr['pic'];
 }
 else if($sub == 1)
 {
-	$id_query = mysql_query("select id from current_id where sno = '$main'");
-	$id = mysql_fetch_array($id_query);
-	$query = mysql_query("select * from parent where id = '$id[id]'") or die(mysql_error());
-				$qr = mysql_fetch_array($query);
+	$id_query = mysqli_query($connection,"select id from current_id where sno = '$main'");
+	$id = mysqli_fetch_array($id_query);
+	$query = mysqli_query($connection,"select * from parent where id = '$id[id]'") or die(mysqli_error($connection));
+				$qr = mysqli_fetch_array($query);
 					$imageData = $qr['fpic'];
 }
 else if($sub == 2)
 {
-	$id_query = mysql_query("select id from current_id where sno = '$main'");
-	$id = mysql_fetch_array($id_query);
-	$query = mysql_query("select * from parent where id = '$id[id]'") or die(mysql_error());	
+	$id_query = mysqli_query($connection,"select id from current_id where sno = '$main'");
+	$id = mysqli_fetch_array($id_query);
+	$query = mysqli_query($connection,"select * from parent where id = '$id[id]'") or die(mysqli_error($connection));	
 				
-				$qr = mysql_fetch_array($query);
+				$qr = mysqli_fetch_array($query);
 					$imageData = $qr['mpic'];
 }
 else
 	{
-	$query = mysql_query("select * from admin where sno = '1'") or die(mysql_error());	
-				while($qr = mysql_fetch_array($query))
+	$query = mysqli_query($connection,"select * from admin where sno = '1'") or die(mysqli_error($connection));	
+				while($qr = mysqli_fetch_array($query))
 				{
 					//die(mysql_error());
 					$imageData = $qr[1];
@@ -39,8 +39,8 @@ else
 	}
 if(empty($imageData))
 {
-	$query = mysql_query("select * from admin where sno = '1'") or die(mysql_error());	
-				while($qr = mysql_fetch_array($query))
+	$query = mysqli_query($connection,"select * from admin where sno = '1'") or die(mysqli_error($connection));	
+				while($qr = mysqli_fetch_array($query))
 				{
 					//die(mysql_error());
 					$imageData = $qr[1];

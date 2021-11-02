@@ -13,10 +13,10 @@
 $current_id = $_GET['id'];
 //***********
 		$current_year = date("Y");
-		$year_from_current_id = mysql_query("select max(aca_year) from current_id");
+		$year_from_current_id = mysqli_query($connection,"select max(aca_year) from current_id");
 		if($year_from_current_id)
 		{
-			$year_from_current_id_result = mysql_fetch_array($year_from_current_id);
+			$year_from_current_id_result = mysqli_fetch_array($year_from_current_id);
 			if($current_year > $year_from_current_id_result[0])
 				$current_year -= 1;
 			}
@@ -24,9 +24,9 @@ $current_id = $_GET['id'];
 		//*************
 
 
-$paid_fee_query = mysql_query("select * from payfee where current_id = '$current_id'");
-$current_id_query = mysql_query("select * from current_id where sno = '$current_id' and aca_year = '$current_year'") or die(mysql_error());
-$current_id_query_result = mysql_fetch_array($current_id_query);
+$paid_fee_query = mysqli_query($connection,"select * from payfee where current_id = '$current_id'");
+$current_id_query = mysqli_query($connection,"select * from current_id where sno = '$current_id' and aca_year = '$current_year'") or die(mysqli_error($connection));
+$current_id_query_result = mysqli_fetch_array($current_id_query);
 ?>
 <body class="main">
 <div class="main">
@@ -37,8 +37,8 @@ $current_id_query_result = mysql_fetch_array($current_id_query);
     </div>
     <div class="col-md-2" style="background-color:#F00">
     <?php
-	$fee_query = mysql_query("select * from fee where akey = '$current_id_query_result[2]'") or die(mysql_error());
-	$fee_query_result = mysql_fetch_array($fee_query);
+	$fee_query = mysqli_query($connection,"select * from fee where akey = '$current_id_query_result[2]'") or die(mysqli_error($connection));
+	$fee_query_result = mysqli_fetch_array($fee_query);
 	echo '<h3>'.$fee_query_result['fee'].'</h3>';
 	?>
     </div>
@@ -57,7 +57,7 @@ $current_id_query_result = mysql_fetch_array($current_id_query);
 <?php
 	$i = 0;
 	$sum = 0;
-while($paid_fee_query_result = mysql_fetch_array($paid_fee_query))
+while($paid_fee_query_result = mysqli_fetch_array($paid_fee_query))
 {
 	$i += 1;
 	$sum += $paid_fee_query_result['amount'];

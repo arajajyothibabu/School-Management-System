@@ -14,10 +14,10 @@
 			
 		//***********
 		$current_year = date("Y");
-		$year_from_current_id = mysql_query("select max(aca_year) from current_id");
+		$year_from_current_id = mysqli_query($connection,"select max(aca_year) from current_id");
 		if($year_from_current_id)
 		{
-			$year_from_current_id_result = mysql_fetch_array($year_from_current_id);
+			$year_from_current_id_result = mysqli_fetch_array($year_from_current_id);
 			if($current_year > $year_from_current_id_result[0])
 				$current_year -= 1;
 			}
@@ -38,7 +38,7 @@ if(isset($_POST['update']))
 	foreach($keysub as $i => $j)
 	{
 		
-		$qry = mysql_query("UPDATE sub_staff set staff = '$faculty[$i]' where key_sub = '$keysub[$i]' and stamp = '$current_year'") or die(mysql_error());
+		$qry = mysqli_query($connection,"UPDATE sub_staff set staff = '$faculty[$i]' where key_sub = '$keysub[$i]' and stamp = '$current_year'") or die(mysqli_error($connection));
 		$i += 1;
 		}
 		if($i != 0)
@@ -118,8 +118,8 @@ else
         	<select name="subject" class="form-control">
             <option value="">--Subject--</option>
             <?php 
-			$subjects_query = mysql_query("select * from subjects") or die(mysql_error());
-			while($subjects_query_result = mysql_fetch_array($subjects_query))
+			$subjects_query = mysqli_query($connection,"select * from subjects") or die(mysqli_error($connection));
+			while($subjects_query_result = mysqli_fetch_array($subjects_query))
 			{
 				echo '<option value="'.$subjects_query_result[0].'"';
 				 if($subject == $subjects_query_result[0]) echo 'selected="selected">';
@@ -148,18 +148,18 @@ if(isset($_POST['submit']) || isset($_POST['update']))
 {
 	if($medium != "" && $class != "" && $section != "")
 	{
-		$akey_query = mysql_query("select * from akey where medium = '$medium' and class = '$class' and section = '$section'") or die(mysql_error());
-		$akey_query_result = mysql_fetch_array($akey_query);
+		$akey_query = mysqli_query($connection,"select * from akey where medium = '$medium' and class = '$class' and section = '$section'") or die(mysqli_error($connection));
+		$akey_query_result = mysqli_fetch_array($akey_query);
 		if($subject != "")
-			$key_sub_query = mysql_query("select * from key_sub where sub = '$subject' and akey = '$akey_query_result[0]'");
+			$key_sub_query = mysqli_query($connection,"select * from key_sub where sub = '$subject' and akey = '$akey_query_result[0]'");
 		else
-			$key_sub_query = mysql_query("select * from key_sub where akey = '$akey_query_result[0]'");
+			$key_sub_query = mysqli_query($connection,"select * from key_sub where akey = '$akey_query_result[0]'");
 			
 			
 			
 		$i = 0;
 		$color = "#000";
-		while($key_sub_query_result = mysql_fetch_array($key_sub_query))
+		while($key_sub_query_result = mysqli_fetch_array($key_sub_query))
 		{
 		
 			
@@ -175,16 +175,16 @@ if(isset($_POST['submit']) || isset($_POST['update']))
     <h3 align="center">Name</h3>
     </div>
 </div>';
-			$sub_staff_query = mysql_query("select * from sub_staff where key_sub = '$key_sub_query_result[0]' and stamp = '$current_year'") or die(mysql_error());
-			if($sub_staff_query_result = mysql_fetch_array($sub_staff_query))
+			$sub_staff_query = mysqli_query($connection,"select * from sub_staff where key_sub = '$key_sub_query_result[0]' and stamp = '$current_year'") or die(mysqli_error($connection));
+			if($sub_staff_query_result = mysqli_fetch_array($sub_staff_query))
 			{
 				$i += 1;
 							
 				//$staff_query = mysql_query("select * from staff where sno = '$sub_staff_query_result[2]'");
 				//$staff_query_result = mysql_fetch_array($staff_query);
 				
-				$subject_query = mysql_query("select * from subjects where sno = '$key_sub_query_result[sub]'") or die(mysql_error());
-				$subject_query_result = mysql_fetch_array($subject_query);
+				$subject_query = mysqli_query($connection,"select * from subjects where sno = '$key_sub_query_result[sub]'") or die(mysqli_error($connection));
+				$subject_query_result = mysqli_fetch_array($subject_query);
 			
 				if($color == "#FFF") $color = "#000";
 				else $color = "#FFF";
@@ -204,8 +204,8 @@ if(isset($_POST['submit']) || isset($_POST['update']))
 		<div class="form-group">
 			<div class="form-group">
         	<select name="faculty[]" style="text-align:center;" class="form-control">';
-			$staffs_query = mysql_query("select * from staff") or die(mysql_error());
-			while($staffs_query_result = mysql_fetch_array($staffs_query))
+			$staffs_query = mysqli_query($connection,"select * from staff") or die(mysqli_error($connection));
+			while($staffs_query_result = mysqli_fetch_array($staffs_query))
 			{
 				echo '<option style="text-align:center;" value="'.$staffs_query_result[0].'"';
 				 if($sub_staff_query_result[2] == $staffs_query_result[0]) echo 'selected="selected">';

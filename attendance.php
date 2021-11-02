@@ -24,7 +24,7 @@ if(isset($_POST['update']))
 		if($noc != 0)
 		$noca[$i] = ($nocp[$i]/$noc)*100;
 		else $noca[$i] = 0;
-		$qry = mysql_query("UPDATE attendance set noc = '$noc', nocp = '$nocp[$i]', noca = '$noca[$i]' where current_id = '$current_id[$i]'") or die(mysql_error());
+		$qry = mysqli_query($connection,"UPDATE attendance set noc = '$noc', nocp = '$nocp[$i]', noca = '$noca[$i]' where current_id = '$current_id[$i]'") or die(mysqli_error($connection));
 		$i += 1;
 		}
 		if($i != 0)
@@ -108,25 +108,25 @@ if(isset($_POST['submit']) || isset($_POST['update']))
 {
 	if($medium != "" && $class != "" && $section != "")
 	{
-		$akey_query = mysql_query("select * from akey where medium = '$medium' and class = '$class' and section = '$section'") or die(mysql_error());
-		$akey_query_result = mysql_fetch_array($akey_query);
+		$akey_query = mysqli_query($connection,"select * from akey where medium = '$medium' and class = '$class' and section = '$section'") or die(mysqli_error($connection));
+		$akey_query_result = mysqli_fetch_array($akey_query);
 		/*$key_sub_query = mysql_query("select * from key_sub where sub = '$subject' and akey = '$akey_query_result[0]'");
 		$key_sub_query_result = mysql_fetch_array($key_sub_query);*/
 		//***********
 		$current_year = date("Y");
-		$year_from_current_id = mysql_query("select max(aca_year) from current_id");
+		$year_from_current_id = mysqli_query($connection,"select max(aca_year) from current_id");
 		if($year_from_current_id)
 		{
-			$year_from_current_id_result = mysql_fetch_array($year_from_current_id);
+			$year_from_current_id_result = mysqli_fetch_array($year_from_current_id);
 			if($current_year > $year_from_current_id_result[0])
 				$current_year -= 1;
 			}
 
 		//*************
-		$current_id_query = mysql_query("select * from current_id where akey = '$akey_query_result[0]' and aca_year = '$current_year'") or die(mysql_error());
+		$current_id_query = mysqli_query($connection,"select * from current_id where akey = '$akey_query_result[0]' and aca_year = '$current_year'") or die(mysqli_error($connection));
 		$i = 0;
 		$color = "#000";
-		while($current_id_query_result = mysql_fetch_array($current_id_query))
+		while($current_id_query_result = mysqli_fetch_array($current_id_query))
 		{
 			$i += 1;
 			if($i == 1)
@@ -148,10 +148,10 @@ if(isset($_POST['submit']) || isset($_POST['update']))
     </div>
 </div>';
 			//static student details
-			$student_query = mysql_query("select * from student where id = '$current_id_query_result[1]'") or die(mysql_error());
-			$student_query_result = mysql_fetch_array($student_query);
-			$attendance_query = mysql_query("select * from attendance where current_id = '$current_id_query_result[0]'") or die(mysql_error());
-			$attendance_query_result = mysql_fetch_array($attendance_query);
+			$student_query = mysqli_query($connection,"select * from student where id = '$current_id_query_result[1]'") or die(mysqli_error($connection));
+			$student_query_result = mysqli_fetch_array($student_query);
+			$attendance_query = mysqli_query($connection,"select * from attendance where current_id = '$current_id_query_result[0]'") or die(mysqli_error($connection));
+			$attendance_query_result = mysqli_fetch_array($attendance_query);
 				if($color == "#FFF") $color = "#000";
 				else $color = "#FFF";
 				echo '<div class="row" style="border-bottom:thick;">

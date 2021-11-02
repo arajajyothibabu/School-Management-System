@@ -14,10 +14,10 @@
 			
 		//***********
 		$current_year = date("Y");
-		$year_from_current_id = mysql_query("select max(aca_year) from current_id");
+		$year_from_current_id = mysqli_query($connection,"select max(aca_year) from current_id");
 		if($year_from_current_id)
 		{
-			$year_from_current_id_result = mysql_fetch_array($year_from_current_id);
+			$year_from_current_id_result = mysqli_fetch_array($year_from_current_id);
 			if($current_year > $year_from_current_id_result[0])
 				$current_year -= 1;
 			}
@@ -27,16 +27,16 @@
 ?>
 <?php
 $current_id = $_GET['id'];
-					$current_id_query = mysql_query("select * from current_id where sno = '$current_id' and aca_year = '$current_year'") or die(mysql_error());
-					$current_id_query_result = mysql_fetch_array($current_id_query);
-					$akey_query = mysql_query("select * from akey where sno = '$current_id_query_result[akey]'") or die(mysql_error());
-					$akey_query_result = mysql_fetch_array($akey_query);
-					$vstudent_query = mysql_query("select * from vstudent where current_id = '$current_id'") or die(mysql_error());
-					$vstudent_query_result = mysql_fetch_array($vstudent_query);
-					$student_query = mysql_query("select * from student where id = '$current_id_query_result[1]'") or die(mysql_error());
-					$student_query_result = mysql_fetch_array($student_query);
-					$parent_query = mysql_query("select * from parent where id = '$current_id_query_result[1]'") or die(mysql_error());
-					$parent_query_result = mysql_fetch_array($parent_query);
+					$current_id_query = mysqli_query($connection,"select * from current_id where sno = '$current_id' and aca_year = '$current_year'") or die(mysqli_error($connection));
+					$current_id_query_result = mysqli_fetch_array($current_id_query);
+					$akey_query = mysqli_query($connection,"select * from akey where sno = '$current_id_query_result[akey]'") or die(mysqli_error($connection));
+					$akey_query_result = mysqli_fetch_array($akey_query);
+					$vstudent_query = mysqli_query($connection,"select * from vstudent where current_id = '$current_id'") or die(mysqli_error($connection));
+					$vstudent_query_result = mysqli_fetch_array($vstudent_query);
+					$student_query = mysqli_query($connection,"select * from student where id = '$current_id_query_result[1]'") or die(mysqli_error($connection));
+					$student_query_result = mysqli_fetch_array($student_query);
+					$parent_query = mysqli_query($connection,"select * from parent where id = '$current_id_query_result[1]'") or die(mysqli_error($connection));
+					$parent_query_result = mysqli_fetch_array($parent_query);
 					
 										
 					
@@ -93,8 +93,8 @@ $current_id = $_GET['id'];
         <h4 align="left"><?php echo $address; ?></h4>
         <h4 align="left"><?php echo $contact; ?></h4>
         <h4 align="left"><?php 
-			$transport_query = mysql_query("select * from transport where sno = '$transport'");
-			while($result = mysql_fetch_array($transport_query))
+			$transport_query = mysqli_query($connection,"select * from transport where sno = '$transport'");
+			while($result = mysqli_fetch_array($transport_query))
 			{
 				echo $result[1].' / '.$result[2];
 			}
@@ -116,15 +116,15 @@ $current_id = $_GET['id'];
         <h4 align="left"><?php echo $section; ?></h4>
         <h4 align="left"><?php echo $sex; ?></h4>
         <h4 align="left"><?php
-		$caste_query = mysql_query("select * from caste where sno = '$caste'");
-				while($caste_query_result = mysql_fetch_array($caste_query))
+		$caste_query = mysqli_query($connection,"select * from caste where sno = '$caste'");
+				while($caste_query_result = mysqli_fetch_array($caste_query))
 				{
 				 echo $caste_query_result[1];	
 				}
 			?></h4>
         <h4 align="left"><?php 
-		$religion_query = mysql_query("select * from religion where sno = '$religion'");
-				while($religion_query_result = mysql_fetch_array($religion_query))
+		$religion_query = mysqli_query($connection,"select * from religion where sno = '$religion'");
+				while($religion_query_result = mysqli_fetch_array($religion_query))
 				{
 				 echo $religion_query_result[1];
                  }
@@ -177,26 +177,26 @@ $current_id = $_GET['id'];
 </div>
 <?php
 					//academic detials..
-					$key_sub_query = mysql_query("select * from key_sub where akey = '$akey_query_result[0]'");
-				while($key_sub_query_result = mysql_fetch_array($key_sub_query))
+					$key_sub_query = mysqli_query($connection,"select * from key_sub where akey = '$akey_query_result[0]'");
+				while($key_sub_query_result = mysqli_fetch_array($key_sub_query))
 				{
 					
-					$sub_staff_query = mysql_query("select * from sub_staff where key_sub = '$key_sub_query_result[0]' and stamp = '$current_year'") or die(mysql_error());
-					while($sub_staff_query_result = mysql_fetch_array($sub_staff_query))
+					$sub_staff_query = mysqli_query($connection,"select * from sub_staff where key_sub = '$key_sub_query_result[0]' and stamp = '$current_year'") or die(mysqli_error($connection));
+					while($sub_staff_query_result = mysqli_fetch_array($sub_staff_query))
 					{
 						//storing subjects in an array
 						$subjects = 
 						
 						//staff names
-						$staff_query = mysql_query("select * from staff where sno = '$sub_staff_query_result[2]'");
-						$staff_query_result = mysql_fetch_array($staff_query);
+						$staff_query = mysqli_query($connection,"select * from staff where sno = '$sub_staff_query_result[2]'");
+						$staff_query_result = mysqli_fetch_array($staff_query);
 						
 						//storing staff names in an array
 						$staff = 
-						$aca_key_query = mysql_query("select * from aca_key where current_id = '$current_id' and key_sub = '$key_sub_query_result[0]'");
-						while($aca_key_query_result = mysql_fetch_array($aca_key_query))
+						$aca_key_query = mysqli_query($connection,"select * from aca_key where current_id = '$current_id' and key_sub = '$key_sub_query_result[0]'");
+						while($aca_key_query_result = mysqli_fetch_array($aca_key_query))
 						{
-							$dtmarks_query = mysql_query("select * from marks_dts where aca_key = '$aca_key_query_result[0]'");
+							$dtmarks_query = mysqli_query($connection,"select * from marks_dts where aca_key = '$aca_key_query_result[0]'");
 							
 							}
 							

@@ -2,7 +2,7 @@
 //database constants
 define("server","localhost");
 define("user","root");
-define("pass","aascar");
+define("pass","");
 define("name","school");
 
 ?>

@@ -11,10 +11,10 @@
 </head>
 <?php
 $current_id = $_GET['id'];
-					$current_id_query = mysql_query("select * from current_id where sno = '$current_id'") or die(mysql_error());
-					$current_id_query_result = mysql_fetch_array($current_id_query);
-					$akey_query = mysql_query("select * from akey where sno = '$current_id_query_result[akey]'") or die(mysql_error());
-					$akey_query_result = mysql_fetch_array($akey_query);
+					$current_id_query = mysqli_query($connection,"select * from current_id where sno = '$current_id'") or die(mysqli_error($connection));
+					$current_id_query_result = mysqli_fetch_array($current_id_query);
+					$akey_query = mysqli_query($connection,"select * from akey where sno = '$current_id_query_result[akey]'") or die(mysqli_error($connection));
+					$akey_query_result = mysqli_fetch_array($akey_query);
 					/*$vstudent_query = mysql_query("select * from vstudent where current_id = '$current_id'") or die(mysql_error());
 					$vstudent_query_result = mysql_fetch_array($vstudent_query);
 					$student_query = mysql_query("select * from student where id = '$current_id_query_result[1]'") or die(mysql_error());
@@ -38,13 +38,13 @@ if(isset($_POST['submit']))
 							   // $check = getimagesize($_FILES["pic"]["tmp_name"]);
 								if($_FILES["spic"]["size"] != 0) {
 							  
-							   $imageName = mysql_real_escape_string($_FILES["spic"]["name"]);
-							   $imageData = mysql_real_escape_string(file_get_contents($_FILES["spic"]["tmp_name"]));
-							   $imageType = mysql_real_escape_string($_FILES["spic"]["type"]);
+							   $imageName = mysqli_real_escape_string($connection,$_FILES["spic"]["name"]);
+							   $imageData = mysqli_real_escape_string($connection,file_get_contents($_FILES["spic"]["tmp_name"]));
+							   $imageType = mysqli_real_escape_string($connection,$_FILES["spic"]["type"]);
 										   if($_FILES["spic"]["type"] == "image/jpeg" || $_FILES["spic"]["type"] == "image/gif" || $_FILES["spic"]["type"] == "image/png")
 										   { 
 												$spic = $imageData;		
-											   $vstudent_query = mysql_query("UPDATE vstudent set pic = '$spic' where current_id = '$current_id'")  or die(mysql_error());
+											   $vstudent_query = mysqli_query($connection,"UPDATE vstudent set pic = '$spic' where current_id = '$current_id'")  or die(mysqli_error($connection));
 										   }
 											else
 											{
@@ -61,13 +61,13 @@ else $spic = "";
 							   // $check = getimagesize($_FILES["pic"]["tmp_name"]);
 								if($_FILES["fpic"]["size"] != 0) {
 							  
-							   $imageName = mysql_real_escape_string($_FILES["fpic"]["name"]);
-							   $imageData = mysql_real_escape_string(file_get_contents($_FILES["fpic"]["tmp_name"]));
-							   $imageType = mysql_real_escape_string($_FILES["fpic"]["type"]);
+							   $imageName = mysqli_real_escape_string($connection,$_FILES["fpic"]["name"]);
+							   $imageData = mysqli_real_escape_string($connection,file_get_contents($_FILES["fpic"]["tmp_name"]));
+							   $imageType = mysqli_real_escape_string($connection,$_FILES["fpic"]["type"]);
 							   if($_FILES["fpic"]["type"] == "image/jpeg" || $_FILES["fpic"]["type"] == "image/gif" || $_FILES["fpic"]["type"] == "image/png")
 							   { 
 									$fpic = $imageData;		
-									$parent_query = mysql_query("UPDATE parent set fpic = '$fpic' where id = '$id'") or die(mysql_error());
+									$parent_query = mysqli_query($connection,"UPDATE parent set fpic = '$fpic' where id = '$id'") or die(mysqli_error($connection));
 								   }
 								else
 								{
@@ -83,13 +83,13 @@ else $fpic = "";
 							   // $check = getimagesize($_FILES["pic"]["tmp_name"]);
 								if($_FILES["mpic"]["size"] != 0) {
 							  
-							   $imageName = mysql_real_escape_string($_FILES["mpic"]["name"]);
-							   $imageData = mysql_real_escape_string(file_get_contents($_FILES["mpic"]["tmp_name"]));
-							   $imageType = mysql_real_escape_string($_FILES["mpic"]["type"]);
+							   $imageName = mysqli_real_escape_string($connection,$_FILES["mpic"]["name"]);
+							   $imageData = mysqli_real_escape_string($connection,file_get_contents($_FILES["mpic"]["tmp_name"]));
+							   $imageType = mysqli_real_escape_string($connection,$_FILES["mpic"]["type"]);
 							   if($_FILES["mpic"]["type"] == "image/jpeg" || $_FILES["mpic"]["type"] == "image/gif" || $_FILES["mpic"]["type"] == "image/png")
 							   { 
 									$mpic = $imageData;		
-									$parent_query = mysql_query("UPDATE parent set mpic = '$mpic' where id = '$id'") or die(mysql_error());
+									$parent_query = mysqli_query($connection,"UPDATE parent set mpic = '$mpic' where id = '$id'") or die(mysqli_error($connection));
 								   }
 								else
 								{
@@ -128,47 +128,47 @@ $mpic = "";
 	//if($aadhar!= "" && $ration != "" && $address != "" && $contact != "")
 	if(true)
 	{
-			$student_query = mysql_query("UPDATE student set aadhar = '$aadhar', ration = '$ration' where id = '$id'");
+			$student_query = mysqli_query($connection,"UPDATE student set aadhar = '$aadhar', ration = '$ration' where id = '$id'");
 		
 			//$parent_query = mysql_query("UPDATE parent set fname = '$fname', focu = '$focu', fedu = '$fedu', mname = '$mname', mocu = '$mocu', medu = '$medu', siblings = '$siblings')");
 			if($section != $_POST['section'] || $class != $_POST['class'] || $medium != $_POST['medium'])
 			{
-				$akey_query = mysql_query("select sno from akey where class = '$class' and section = '$section' and medium = '$medium'") or die(mysql_error());
-				$akey = mysql_fetch_array($akey_query);
+				$akey_query = mysqli_query($connection,"select sno from akey where class = '$class' and section = '$section' and medium = '$medium'") or die(mysqli_error($connection));
+				$akey = mysqli_fetch_array($akey_query);
 			
 				$aca_year = date('Y');
 				//******************
 				$current_year = date("Y");
-				$year_from_current_id = mysql_query("select max(aca_year) from current_id");
+				$year_from_current_id = mysqli_query($connection,"select max(aca_year) from current_id");
 				if($year_from_current_id)
 				{
-					$year_from_current_id_result = mysql_fetch_array($year_from_current_id);
+					$year_from_current_id_result = mysqli_fetch_array($year_from_current_id);
 					if($current_year > $year_from_current_id_result[0])
 						$current_year -= 1;
 				}
 				//******************
-				$update_current_id_query = mysql_query("UPDATE current_id set akey = '$akey[0]' where id = '$id' and aca_year = '$current_year'");
+				$update_current_id_query = mysqli_query($connection,"UPDATE current_id set akey = '$akey[0]' where id = '$id' and aca_year = '$current_year'");
 			
-				$current_ids_query = mysql_query("select sno from current_id where id = '$id'");
-				$current_ids_query_result = mysql_fetch_array($current_ids_query);
+				$current_ids_query = mysqli_query($connection,"select sno from current_id where id = '$id'");
+				$current_ids_query_result = mysqli_fetch_array($current_ids_query);
 			
 			$due = 0;
-			$fee_query = mysql_query("select * from fee where akey = '$akey[0]'") or die(mysql_error());
+			$fee_query = mysqli_query($connection,"select * from fee where akey = '$akey[0]'") or die(mysqli_error($connection));
 				if($fee_query)
 				{
-				$aca_fee = mysql_fetch_array($fee_query);
+				$aca_fee = mysqli_fetch_array($fee_query);
 				$due = $aca_fee[0];
 				}
 			if($transport != "0")
 			{
-				$transport_fee_query = mysql_query("select * from transport where sno = '$transport'");
-				$transport_fee = mysql_fetch_array($transport_fee_query);
+				$transport_fee_query = mysqli_query($connection,"select * from transport where sno = '$transport'");
+				$transport_fee = mysqli_fetch_array($transport_fee_query);
 				$due += $transport_fee[0];
 				}
-				$vstudent_query = mysql_query("UPDATE vstudent set current_id = '$current_ids_query_result[0]', due = '$due', transport = '$transport' where current_id = '$current_id'") or die(mysql_error());
+				$vstudent_query = mysqli_query($connection,"UPDATE vstudent set current_id = '$current_ids_query_result[0]', due = '$due', transport = '$transport' where current_id = '$current_id'") or die(mysqli_error($connection));
 			}
 			
-			$vstudent_query = mysql_query("UPDATE vstudent set address = '$address', contact = '$contact', transport = '$transport' where current_id = '$current_id'") or die(mysql_error());
+			$vstudent_query = mysqli_query($connection,"UPDATE vstudent set address = '$address', contact = '$contact', transport = '$transport' where current_id = '$current_id'") or die(mysqli_error($connection));
 		
 		
 		$message = "Updated Successfully..!";
@@ -184,16 +184,16 @@ $mpic = "";
 ?>
 <?php
 $current_id = $_GET['id'];
-					$current_id_query = mysql_query("select * from current_id where sno = '$current_id'") or die(mysql_error());
-					$current_id_query_result = mysql_fetch_array($current_id_query);
-					$akey_query = mysql_query("select * from akey where sno = '$current_id_query_result[akey]'") or die(mysql_error());
-					$akey_query_result = mysql_fetch_array($akey_query);
-					$vstudent_query = mysql_query("select * from vstudent where current_id = '$current_id'") or die(mysql_error());
-					$vstudent_query_result = mysql_fetch_array($vstudent_query);
-					$student_query = mysql_query("select * from student where id = '$current_id_query_result[1]'") or die(mysql_error());
-					$student_query_result = mysql_fetch_array($student_query);
-					$parent_query = mysql_query("select * from parent where id = '$current_id_query_result[1]'") or die(mysql_error());
-					$parent_query_result = mysql_fetch_array($parent_query);
+					$current_id_query = mysqli_query($connection,"select * from current_id where sno = '$current_id'") or die(mysqli_error($connection));
+					$current_id_query_result = mysqli_fetch_array($current_id_query);
+					$akey_query = mysqli_query($connection,"select * from akey where sno = '$current_id_query_result[akey]'") or die(mysqli_error($connection));
+					$akey_query_result = mysqli_fetch_array($akey_query);
+					$vstudent_query = mysqli_query($connection,"select * from vstudent where current_id = '$current_id'") or die(mysqli_error($connection));
+					$vstudent_query_result = mysqli_fetch_array($vstudent_query);
+					$student_query = mysqli_query($connection,"select * from student where id = '$current_id_query_result[1]'") or die(mysqli_error($connection));
+					$student_query_result = mysqli_fetch_array($student_query);
+					$parent_query = mysqli_query($connection,"select * from parent where id = '$current_id_query_result[1]'") or die(mysqli_error($connection));
+					$parent_query_result = mysqli_fetch_array($parent_query);
 					
 //storing details
 
@@ -243,8 +243,8 @@ $current_id = $_GET['id'];
             <select class="form-control" id="sel1" name="caste" disabled="disabled">
             	<option>--Caste--</option>
                	<?php
-				$caste_query = mysql_query("select * from caste");
-				while($caste_query_result = mysql_fetch_array($caste_query))
+				$caste_query = mysqli_query($connection,"select * from caste");
+				while($caste_query_result = mysqli_fetch_array($caste_query))
 				{
 					echo '<option value="'.$caste_query_result[0].'"';
 				 if($caste == $caste_query_result[0]) echo 'selected="selected">';
@@ -265,8 +265,8 @@ $current_id = $_GET['id'];
             <select class="form-control" id="sel1" name="religion" disabled="disabled">
             	<option>--Religion--</option>
                	<?php
-                $religion_query = mysql_query("select * from religion");
-				while($religion_query_result = mysql_fetch_array($religion_query))
+                $religion_query = mysqli_query($connection,"select * from religion");
+				while($religion_query_result = mysqli_fetch_array($religion_query))
 				{
 				echo '<option value="'.$religion_query_result[0].'"';
 				 if($religion == $religion_query_result[0]) echo 'selected="selected">';
@@ -414,8 +414,8 @@ $current_id = $_GET['id'];
             <option value="">-Bus Route(Transport)-</option>
             <option value="0">ByWalk</option>
             <?php 
-			$transport_query = mysql_query("select * from transport");
-			while($result = mysql_fetch_array($transport_query))
+			$transport_query = mysqli_query($connection,"select * from transport");
+			while($result = mysqli_fetch_array($transport_query))
 			{
 				if($transport == $result[0]) $selected = 'selected="selected"';
 				else $selected = "";
