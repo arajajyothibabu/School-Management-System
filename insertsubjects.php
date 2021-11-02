@@ -18,11 +18,11 @@ if(isset($_POST['insert']))
 	$subject = $_POST['subject'];
 	if($medium != "" && $class != "" && $section != "" && $subject != "")
 	{
-		$akey_query = mysql_query("select * from akey where medium = '$medium' and class = '$class' and section = '$section'") or die(mysql_error());
-		$akey_query_result = mysql_fetch_array($akey_query);
+		$akey_query = mysqli_query($connection,"select * from akey where medium = '$medium' and class = '$class' and section = '$section'") or die(mysqli_error($connection));
+		$akey_query_result = mysqli_fetch_array($akey_query);
 		foreach($subject as $i => $j)
 		{
-			$key_sub_query = mysql_query("select * into key_sub where sub = '$subject[$i]' and akey = '$akey_query_result[0]'") or die(mysql_error());
+			$key_sub_query = mysqli_query($connection,"select * into key_sub where sub = '$subject[$i]' and akey = '$akey_query_result[0]'") or die(mysqli_error($connection));
 			$i += 1;
 		}
 		$message = "Subjects inserted successfully..!";
@@ -91,8 +91,8 @@ else
 <div class="row">
         <h3 align="center">Select subjects</h3>
             <?php 
-			$subject_query = mysql_query("select * from subjects") or die(mysql_error());
-			while($subject_query_result = mysql_fetch_array($subject_query))
+			$subject_query = mysqli_query($connection,"select * from subjects") or die(mysqli_error($connection));
+			while($subject_query_result = mysqli_fetch_array($subject_query))
 			{
 				echo '<div class="col-md-1"><div class="form-group"><input type="checkbox" name="subject[]" class="form-control" value="'.$subject_query_result[0].'">';
 				 //if($subject == $subject_query_result[0]) echo 'selected="selected">';

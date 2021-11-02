@@ -22,7 +22,7 @@ if(isset($_POST['update']))
 	foreach($acakey as $i => $j)
 	{
 		
-		$qry = mysql_query("UPDATE marks_units set marks = '$marks[$i]' where aca_key = '$acakey[$i]' and test = '$test'") or die(mysql_error());
+		$qry = mysqli_query($connection,"UPDATE marks_units set marks = '$marks[$i]' where aca_key = '$acakey[$i]' and test = '$test'") or die(mysqli_error($connection));
 		$i += 1;
 		}
 		if($i != 0)
@@ -104,9 +104,9 @@ else
         	<select name="test" class="form-control">
             	<option value="">--Unit-Test/Terminals--</option>
                 <?php
-				$units_test_query = mysql_query("select * from test") or die(mysql_error());
+				$units_test_query = mysqli_query($connection,"select * from test") or die(mysqli_error($connection));
 				if($units_test_query)
-				while($units_test_query_result = mysql_fetch_array($units_test_query))
+				while($units_test_query_result = mysqli_fetch_array($units_test_query))
 				{
 					echo '<option value="'.$units_test_query_result[0].'"';
 					if($test == $units_test_query_result[0]) echo 'selected="selected">';
@@ -122,8 +122,8 @@ else
         	<select name="subject" class="form-control">
             <option value="">--Subject--</option>
             <?php 
-			$subject_query = mysql_query("select * from subjects") or die(mysql_error());
-			while($subject_query_result = mysql_fetch_array($subject_query))
+			$subject_query = mysqli_query($connection,"select * from subjects") or die(mysqli_error($connection));
+			while($subject_query_result = mysqli_fetch_array($subject_query))
 			{
 				echo '<option value="'.$subject_query_result[0].'"';
 				 if($subject == $subject_query_result[0]) echo 'selected="selected">';
@@ -152,29 +152,29 @@ if(isset($_POST['submit']) || isset($_POST['update']))
 {
 	if($medium != "" && $class != "" && $section != "" && $test != "" && $subject != "")
 	{
-		$akey_query = mysql_query("select * from akey where medium = '$medium' and class = '$class' and section = '$section'") or die(mysql_error());
-		$akey_query_result = mysql_fetch_array($akey_query);
-		$key_sub_query = mysql_query("select * from key_sub where sub = '$subject' and akey = '$akey_query_result[0]'");
-		$key_sub_query_result = mysql_fetch_array($key_sub_query);
+		$akey_query = mysqli_query($connection,"select * from akey where medium = '$medium' and class = '$class' and section = '$section'") or die(mysqli_error($connection));
+		$akey_query_result = mysqli_fetch_array($akey_query);
+		$key_sub_query = mysqli_query($connection,"select * from key_sub where sub = '$subject' and akey = '$akey_query_result[0]'");
+		$key_sub_query_result = mysqli_fetch_array($key_sub_query);
 		//***********
 		$current_year = date("Y");
-		$year_from_current_id = mysql_query("select max(aca_year) from current_id");
+		$year_from_current_id = mysqli_query($connection,"select max(aca_year) from current_id");
 		if($year_from_current_id)
 		{
-			$year_from_current_id_result = mysql_fetch_array($year_from_current_id);
+			$year_from_current_id_result = mysqli_fetch_array($year_from_current_id);
 			if($current_year > $year_from_current_id_result[0])
 				$current_year -= 1;
 			}
 
 		//*************
-		$current_id_query = mysql_query("select * from current_id where akey = '$akey_query_result[0]' and aca_year = '$current_year'") or die(mysql_error());
+		$current_id_query = mysqli_query($connection,"select * from current_id where akey = '$akey_query_result[0]' and aca_year = '$current_year'") or die(mysqli_error($connection));
 		$i = 0;
 		$color = "#000";
-		while($current_id_query_result = mysql_fetch_array($current_id_query))
+		while($current_id_query_result = mysqli_fetch_array($current_id_query))
 		{
 				//academic key query for sujects in unit tests
-				$aca_key_query = mysql_query("select * from aca_key where current_id = '$current_id_query_result[0]' and key_sub = '$key_sub_query_result[0]'");
-				$aca_key = mysql_fetch_array($aca_key_query);
+				$aca_key_query = mysqli_query($connection,"select * from aca_key where current_id = '$current_id_query_result[0]' and key_sub = '$key_sub_query_result[0]'");
+				$aca_key = mysqli_fetch_array($aca_key_query);
 				
 			if($aca_key[0])
 			{
@@ -192,11 +192,11 @@ if(isset($_POST['submit']) || isset($_POST['update']))
     </div>
 </div>';
 			//static student details
-			$student_query = mysql_query("select * from student where id = '$current_id_query_result[1]'") or die(mysql_error());
-			$student_query_result = mysql_fetch_array($student_query);
-			$tests_query = mysql_query("select * from marks_units where aca_key = '$aca_key[0]' and test = '$test'") or die(mysql_error());
+			$student_query = mysqli_query($connection,"select * from student where id = '$current_id_query_result[1]'") or die(mysqli_error($connection));
+			$student_query_result = mysqli_fetch_array($student_query);
+			$tests_query = mysqli_query($connection,"select * from marks_units where aca_key = '$aca_key[0]' and test = '$test'") or die(mysqli_error($connection));
 			if($tests_query)
-			$tests_query_result = mysql_fetch_array($tests_query);
+			$tests_query_result = mysqli_fetch_array($tests_query);
 			
 				if($color == "#FFF") $color = "#000";
 				else $color = "#FFF";

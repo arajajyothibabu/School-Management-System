@@ -14,11 +14,11 @@ if(isset($_POST['login']))
 {
 	$username = $_POST['username'];
 	$password = $_POST['password'];
-	$queryresult = mysql_query("select * from users where username = '$username' and password = '$password'") or die(mysql_error());
-			if (mysql_num_rows($queryresult) == 1) {
+	$queryresult = mysqli_query($connection,"select * from users where username = '$username' and password = '$password'") or die(mysqli_error($connection));
+			if (mysqli_num_rows($queryresult) == 1) {
 				// username/password authenticated
 				// and only 1 match
-				$found_user = mysql_fetch_array($queryresult);
+				$found_user = mysqli_fetch_array($queryresult);
 				$_SESSION['user'] = $found_user['privacy'];
 				redirect_to("leftnavbar.php?user=".$found_user['privacy']);
 			}

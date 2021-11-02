@@ -19,28 +19,28 @@ if(isset($_POST['insert']))
 	$subject = $_POST['subject'];
 	if($medium != "" && $class != "" && $section != "" && $dtno != "" && $subject != "")
 	{
-		$akey_query = mysql_query("select * from akey where medium = '$medium' and class = '$class' and section = '$section'") or die(mysql_error());
-		$akey_query_result = mysql_fetch_array($akey_query);
-		$key_sub_query = mysql_query("select * from key_sub where sub = '$subject' and akey = '$akey_query_result[0]'");
-		$key_sub_query_result = mysql_fetch_array($key_sub_query);
+		$akey_query = mysqli_query($connection,"select * from akey where medium = '$medium' and class = '$class' and section = '$section'") or die(mysqli_error($connection));
+		$akey_query_result = mysqli_fetch_array($akey_query);
+		$key_sub_query = mysqli_query($connection,"select * from key_sub where sub = '$subject' and akey = '$akey_query_result[0]'");
+		$key_sub_query_result = mysqli_fetch_array($key_sub_query);
 		//***********
 		$current_year = date("Y");
-		$year_from_current_id = mysql_query("select * from current_id where aca_year = '$current_year'");
+		$year_from_current_id = mysqli_query($connection,"select * from current_id where aca_year = '$current_year'");
 		if(empty($year_from_current_id))
 			$current_year -= 1;
 		//*************
-		$current_id_query = mysql_query("select * from current_id where akey = '$akey_query_result[0]' and aca_year = '$current_year'") or die(mysql_error());
+		$current_id_query = mysqli_query($connection,"select * from current_id where akey = '$akey_query_result[0]' and aca_year = '$current_year'") or die(mysqli_error($connection));
 		$i = 0;
-		while($current_id_query_result = mysql_fetch_array($current_id_query))
+		while($current_id_query_result = mysqli_fetch_array($current_id_query))
 		{
 			$i += 1;
 			
-			$insert_academic_key_query = mysql_query("INSERT into aca_key values('','$current_id_query_result[0]','$key_sub_query_result[0]')");
+			$insert_academic_key_query = mysqli_query($connection,"INSERT into aca_key values('','$current_id_query_result[0]','$key_sub_query_result[0]')");
 
-			$aca_key_query = mysql_query("select max(sno) from aca_key");
-			$aca_key = mysql_fetch_array($aca_key_query);
+			$aca_key_query = mysqli_query($connection,"select max(sno) from aca_key");
+			$aca_key = mysqli_fetch_array($aca_key_query);
 				//insering tuples for entire class
-				$insert_marks_DT_query = mysql_query("INSERT into marks_dt values('','$aca_key[0]','$dtno','','1')") or die(mysql_error());
+				$insert_marks_DT_query = mysqli_query($connection,"INSERT into marks_dt values('','$aca_key[0]','$dtno','','1')") or die(mysqli_error($connection));
 			}
 			if($i == 0)
 			$message = "No records inserted..! Try again..!";
@@ -115,8 +115,8 @@ else
         	<select name="subject" class="form-control">
             <option value="">--Subject--</option>
             <?php 
-			$subject_query = mysql_query("select * from subjects") or die(mysql_error());
-			while($subject_query_result = mysql_fetch_array($subject_query))
+			$subject_query = mysqli_query($connection,"select * from subjects") or die(mysqli_error($connection));
+			while($subject_query_result = mysqli_fetch_array($subject_query))
 			{
 				echo '<option value="'.$subject_query_result[0].'"';
 				 if($subject == $subject_query_result[0]) echo 'selected="selected">';

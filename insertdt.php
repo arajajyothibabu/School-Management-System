@@ -21,29 +21,29 @@ if(isset($_POST['insert']))
 	
 	if($medium != "" && $class != "" && $section != "" && $dtno != "" && $subject != "" || $dtno == 1 && $faculty != "")
 	{
-		$akey_query = mysql_query("select * from akey where medium = '$medium' and class = '$class' and section = '$section'") or die(mysql_error());
-		$akey_query_result = mysql_fetch_array($akey_query);
-		$key_sub_query = mysql_query("select * from key_sub where sub = '$subject' and akey = '$akey_query_result[0]'");
-		$key_sub_query_result = mysql_fetch_array($key_sub_query);
+		$akey_query = mysqli_query($connection,"select * from akey where medium = '$medium' and class = '$class' and section = '$section'") or die(mysqli_error($connection));
+		$akey_query_result = mysqli_fetch_array($akey_query);
+		$key_sub_query = mysqli_query($connection,"select * from key_sub where sub = '$subject' and akey = '$akey_query_result[0]'");
+		$key_sub_query_result = mysqli_fetch_array($key_sub_query);
 		//***********
 		$current_year = date("Y");
-		$year_from_current_id = mysql_query("select max(aca_year) from current_id");
+		$year_from_current_id = mysqli_query($connection,"select max(aca_year) from current_id");
 		if($year_from_current_id)
 		{
-			$year_from_current_id_result = mysql_fetch_array($year_from_current_id);
+			$year_from_current_id_result = mysqli_fetch_array($year_from_current_id);
 			if($current_year > $year_from_current_id_result[0])
 				$current_year -= 1;
 			}
 		//*************
-		$current_id_query = mysql_query("select * from current_id where akey = '$akey_query_result[0]' and aca_year = '$current_year'") or die(mysql_error());
+		$current_id_query = mysqli_query($connection,"select * from current_id where akey = '$akey_query_result[0]' and aca_year = '$current_year'") or die(mysqli_error($connection));
 		$i = 0;
 		// inserting staff for a subject
 		if($dtno == 1)
 		{
-			$sub_staff_query = mysql_query("INSERT into sub_staff values ('','$key_sub_query_result[0]','$faculty','$current_year')");
+			$sub_staff_query = mysqli_query($connection,"INSERT into sub_staff values ('','$key_sub_query_result[0]','$faculty','$current_year')");
 			}
 			
-		while($current_id_query_result = mysql_fetch_array($current_id_query))
+		while($current_id_query_result = mysqli_fetch_array($current_id_query))
 		{
 			$i += 1;
 			
@@ -54,25 +54,25 @@ if(isset($_POST['insert']))
 				
 				//inserting academic key (aca_key) at once in a year
 				//*********************************
-			$insert_academic_key_query = mysql_query("INSERT into aca_key values('','$current_id_query_result[0]','$key_sub_query_result[0]')");
-			$aca_key_query = mysql_query("select max(sno) from aca_key");
-			$aca_key = mysql_fetch_array($aca_key_query);
+			$insert_academic_key_query = mysqli_query($connection,"INSERT into aca_key values('','$current_id_query_result[0]','$key_sub_query_result[0]')");
+			$aca_key_query = mysqli_query($connection,"select max(sno) from aca_key");
+			$aca_key = mysqli_fetch_array($aca_key_query);
 			//checking if DT-1 already exists
 			//$check_dtno1 = mysql_query("select * from marks_dt where aca_key = '$aca_key[0]' and dtno = '1'");			
-				$units_test_query = mysql_query("select * from test") or die(mysql_error());
+				$units_test_query = mysqli_query($connection,"select * from test") or die(mysqli_error($connection));
 				if($units_test_query)
-				while($units_test_query_result = mysql_fetch_array($units_test_query))
+				while($units_test_query_result = mysqli_fetch_array($units_test_query))
 				{
-					$insert_unit_test_tuples = mysql_query("INSERT into marks_units values('','$aca_key[0]','$units_test_query_result[0]','','','1')");
+					$insert_unit_test_tuples = mysqli_query($connection,"INSERT into marks_units values('','$aca_key[0]','$units_test_query_result[0]','','','1')");
 					}
 			}
 			else
 			{
-				$aca_key_query = mysql_query("select * from aca_key where current_id = '$current_id_query_result[0]' and key_sub = '$key_sub_query_result[0]'");
-				$aca_key = mysql_fetch_array($aca_key_query);
+				$aca_key_query = mysqli_query($connection,"select * from aca_key where current_id = '$current_id_query_result[0]' and key_sub = '$key_sub_query_result[0]'");
+				$aca_key = mysqli_fetch_array($aca_key_query);
 				}
 				//insering tuples for entire class
-				$insert_marks_DT_query = mysql_query("INSERT into marks_dts values('','$aca_key[0]','$dtno','','1')") or die(mysql_error());
+				$insert_marks_DT_query = mysqli_query($connection,"INSERT into marks_dts values('','$aca_key[0]','$dtno','','1')") or die(mysqli_error($connection));
 			}
 			if($i == 0)
 			$message = "No records inserted..! Try again..!";
@@ -148,8 +148,8 @@ else
         	<select name="subject" class="form-control">
             <option value="">--Subject--</option>
             <?php 
-			$subject_query = mysql_query("select * from subjects") or die(mysql_error());
-			while($subject_query_result = mysql_fetch_array($subject_query))
+			$subject_query = mysqli_query($connection,"select * from subjects") or die(mysqli_error($connection));
+			while($subject_query_result = mysqli_fetch_array($subject_query))
 			{
 				echo '<option value="'.$subject_query_result[0].'"';
 				 if($subject == $subject_query_result[0]) echo 'selected="selected">';
@@ -192,8 +192,8 @@ else
         	<select name="faculty" class="form-control">
             <option value="">--Staff of Subject--</option>
             <?php 
-			$staff_query = mysql_query("select * from staff") or die(mysql_error());
-			while($staff_query_result = mysql_fetch_array($staff_query))
+			$staff_query = mysqli_query($connection,"select * from staff") or die(mysqli_error($connection));
+			while($staff_query_result = mysqli_fetch_array($staff_query))
 			{
 				echo '<option value="'.$staff_query_result[0].'"';
 				 if($faculty == $staff_query_result[0]) echo 'selected="selected">';

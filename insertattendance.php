@@ -17,25 +17,25 @@ if(isset($_POST['insert']))
 	$section = $_POST['section'];
 	if($medium != "" && $class != "" && $section != "")
 	{
-		$akey_query = mysql_query("select * from akey where medium = '$medium' and class = '$class' and section = '$section'") or die(mysql_error());
-		$akey_query_result = mysql_fetch_array($akey_query);
+		$akey_query = mysqli_query($connection,"select * from akey where medium = '$medium' and class = '$class' and section = '$section'") or die(mysqli_error($connection));
+		$akey_query_result = mysqli_fetch_array($akey_query);
 		//***********
 		$current_year = date("Y");
-		$year_from_current_id = mysql_query("select max(aca_year) from current_id");
+		$year_from_current_id = mysqli_query($connection,"select max(aca_year) from current_id");
 		if($year_from_current_id)
 		{
-			$year_from_current_id_result = mysql_fetch_array($year_from_current_id);
+			$year_from_current_id_result = mysqli_fetch_array($year_from_current_id);
 			if($current_year > $year_from_current_id_result[0])
 				$current_year -= 1;
 			}
 		//*************
-		$current_id_query = mysql_query("select * from current_id where akey = '$akey_query_result[0]' and aca_year = '$current_year'") or die(mysql_error());
+		$current_id_query = mysqli_query($connection,"select * from current_id where akey = '$akey_query_result[0]' and aca_year = '$current_year'") or die(mysqli_error($connection));
 		$i = 0;
-		while($current_id_query_result = mysql_fetch_array($current_id_query))
+		while($current_id_query_result = mysqli_fetch_array($current_id_query))
 		{
 			$i += 1;
 			
-			$insert_attendance = mysql_query("INSERT into attendance values('','$current_id_query_result[0]','','','','1')");
+			$insert_attendance = mysqli_query($connection,"INSERT into attendance values('','$current_id_query_result[0]','','','','1')");
 
 			}
 			if($i == 0)

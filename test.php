@@ -25,8 +25,8 @@ if(isset($_POST['submit']))
 <form action="" method="get">
 <div class="row">
 <?php 
-			$subject_query = mysql_query("select * from subjects") or die(mysql_error());
-			while($subject_query_result = mysql_fetch_array($subject_query))
+			$subject_query = mysqli_query($connection,"select * from subjects") or die(mysqli_error($connection));
+			while($subject_query_result = mysqli_fetch_array($subject_query))
 			{
 				echo '<div class="col-md-1"><div class="form-group"><input type="checkbox" name="subject[]" class="form-control" value="'.$subject_query_result[0].'">';
 				 //if($subject == $subject_query_result[0]) echo 'selected="selected">';

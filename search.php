@@ -101,29 +101,29 @@ if(isset($_POST['search']))
 		$i = 0;
 	//***************************
 	$current_year = date("Y");
-		$year_from_current_id = mysql_query("select max(aca_year) from current_id");
+		$year_from_current_id = mysqli_query($connection,"select max(aca_year) from current_id");
 		if($year_from_current_id)
 		{
-			$year_from_current_id_result = mysql_fetch_array($year_from_current_id);
+			$year_from_current_id_result = mysqli_fetch_array($year_from_current_id);
 			if($current_year > $year_from_current_id_result[0])
 				$current_year -= 1;
 			}
 	//***************************
 	if(isset($_POST['sid']) && $_POST['sid'] != "")
 	{
-		$current_id_query = mysql_query("select * from current_id where id = '$_POST[sid]' and aca_year = '$current_year'");
+		$current_id_query = mysqli_query($connection,"select * from current_id where id = '$_POST[sid]' and aca_year = '$current_year'");
 		if($current_id_query)
 		{
-			$current_id_query_result = mysql_fetch_array($current_id_query);
-			$vstudent_query = mysql_query("select * from vstudent where current_id = '$current_id_query_result[0]'") or die(mysql_error());
+			$current_id_query_result = mysqli_fetch_array($current_id_query);
+			$vstudent_query = mysqli_query($connection,"select * from vstudent where current_id = '$current_id_query_result[0]'") or die(mysqli_error($connection));
 			if($vstudent_query)
 			{
-				$vstudent_query_result = mysql_fetch_array($vstudent_query);
-				$student_query = mysql_query("select * from student where id = '$_POST[sid]'");
+				$vstudent_query_result = mysqli_fetch_array($vstudent_query);
+				$student_query = mysqli_query($connection,"select * from student where id = '$_POST[sid]'");
 				$i = 0;
 				if($student_query)
 				{
-				while($search_result = mysql_fetch_array($student_query))
+				while($search_result = mysqli_fetch_array($student_query))
 				{
 			$i = 1;
 			echo '<div class="row" style="border-bottom:solid;">
@@ -162,13 +162,13 @@ if(isset($_POST['search']))
 		$section = getClearedNull($_POST['section']);
 		if($medium != "" && $class != "" && $section != "") {
 			$i = 0;
-			$akey_query = mysql_query("select * from akey where medium LIKE '$medium' && class LIKE '$class' && section LIKE '$section'") or die(mysql_error());
-			while ($akey = mysql_fetch_array($akey_query)) {
+			$akey_query = mysqli_query($connection,"select * from akey where medium LIKE '$medium' && class LIKE '$class' && section LIKE '$section'") or die(mysqli_error($connection));
+			while ($akey = mysqli_fetch_array($akey_query)) {
 				//query for current id
-				$current_id_query = mysql_query("select * from current_id where akey = '$akey[0]' and aca_year = '$current_year' ORDER BY id");
+				$current_id_query = mysqli_query($connection,"select * from current_id where akey = '$akey[0]' and aca_year = '$current_year' ORDER BY id");
 
 				$color = "#000";
-				while ($current_id_query_result = mysql_fetch_array($current_id_query)) {
+				while ($current_id_query_result = mysqli_fetch_array($current_id_query)) {
 					$i += 1;
 					if ($i == 1)
 						echo '<div class="row" style="border-bottom:solid;">
@@ -184,10 +184,10 @@ if(isset($_POST['search']))
 </div>
 ';
 					//vstudent and students query
-					$vstudent_query = mysql_query("select * from vstudent where current_id = '$current_id_query_result[1]'");
-					$vstudent_query_result = mysql_fetch_array($vstudent_query);
-					$student_query = mysql_query("select * from student where id = '$current_id_query_result[id]'");
-					$search_result = mysql_fetch_array($student_query);
+					$vstudent_query = mysqli_query($connection,"select * from vstudent where current_id = '$current_id_query_result[1]'");
+					$vstudent_query_result = mysqli_fetch_array($vstudent_query);
+					$student_query = mysqli_query($connection,"select * from student where id = '$current_id_query_result[id]'");
+					$search_result = mysqli_fetch_array($student_query);
 					if ($color == "#FFF") $color = "#000";
 					else $color = "#FFF";
 					echo '<a href="' . $page . '?id=' . $current_id_query_result[0] . '"><div style="border-bottom:solid;" class="row">

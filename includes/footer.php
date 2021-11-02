@@ -4,6 +4,6 @@
 <?php
 	// 5. Close connection
 	if(isset($connection)){
-	mysql_close($connection);
+	mysqli_close($connection);
 	}
 ?>

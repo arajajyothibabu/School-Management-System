@@ -12,16 +12,16 @@
 
 <?php
 $current_id = $_GET['id'];
-					$current_id_query = mysql_query("select * from current_id where sno = '$current_id'") or die(mysql_error());
-					$current_id_query_result = mysql_fetch_array($current_id_query);
-					$akey_query = mysql_query("select * from akey where sno = '$current_id_query_result[akey]'") or die(mysql_error());
-					$akey_query_result = mysql_fetch_array($akey_query);
-					$vstudent_query = mysql_query("select * from vstudent where current_id = '$current_id'") or die(mysql_error());
-					$vstudent_query_result = mysql_fetch_array($vstudent_query);
-					$student_query = mysql_query("select * from student where id = '$current_id_query_result[1]'") or die(mysql_error());
-					$student_query_result = mysql_fetch_array($student_query);
-					$parent_query = mysql_query("select * from parent where id = '$current_id_query_result[1]'") or die(mysql_error());
-					$parent_query_result = mysql_fetch_array($parent_query);
+					$current_id_query = mysqli_query($connection,"select * from current_id where sno = '$current_id'") or die(mysqli_error($connection));
+					$current_id_query_result = mysqli_fetch_array($current_id_query);
+					$akey_query = mysqli_query($connection,"select * from akey where sno = '$current_id_query_result[akey]'") or die(mysqli_error($connection));
+					$akey_query_result = mysqli_fetch_array($akey_query);
+					$vstudent_query = mysqli_query($connection,"select * from vstudent where current_id = '$current_id'") or die(mysqli_error($connection));
+					$vstudent_query_result = mysqli_fetch_array($vstudent_query);
+					$student_query = mysqli_query($connection,"select * from student where id = '$current_id_query_result[1]'") or die(mysqli_error($connection));
+					$student_query_result = mysqli_fetch_array($student_query);
+					$parent_query = mysqli_query($connection,"select * from parent where id = '$current_id_query_result[1]'") or die(mysqli_error($connection));
+					$parent_query_result = mysqli_fetch_array($parent_query);
 					
 //storing details
 
@@ -66,9 +66,9 @@ if(isset($_POST['pay']))
 	$dop = $_POST['dop'];
 	if($amount != "" && $dop != "")
 	{
-			$payfee_query = mysql_query("INSERT into payfee values('','$current_id','$dop','$amount')") or die(mysql_error());
+			$payfee_query = mysqli_query($connection,"INSERT into payfee values('','$current_id','$dop','$amount')") or die(mysqli_error($connection));
 			$final_due = $due - $amount;
-			$parent_query = mysql_query("UPDATE vstudent set due = '$final_due' where current_id = '$current_id'") or die(mysql_error());
+			$parent_query = mysqli_query($connection,"UPDATE vstudent set due = '$final_due' where current_id = '$current_id'") or die(mysqli_error($connection));
 		
 		$message = "Payment done successfully..!";
 	}
@@ -157,8 +157,8 @@ if(isset($_POST['pay']))
             <option value="0">-Bus Route(Transport)-</option>
             <option value="0">ByWalk</option>
             <?php 
-			$transport_query = mysql_query("select * from transport");
-			while($result = mysql_fetch_array($transport_query))
+			$transport_query = mysqli_query($connection,"select * from transport");
+			while($result = mysqli_fetch_array($transport_query))
 			{
 				if($transport == $result[0]) $selected = 'selected="selected"';
 				else $selected = "";
